@@ -1,0 +1,13 @@
+{
+  "name": "talkin",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix be && npm install --prefix fe && npm run build --prefix fe",
+    "start": "npm run start --prefix be"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
