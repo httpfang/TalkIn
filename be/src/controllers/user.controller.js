@@ -6,14 +6,32 @@ export async function getRecommendedUsers(req, res) {
     try{
         const currentUserId = req.user.id;
         const currentUser = req.user;
+        
+        // Get users who have sent friend requests to current user
+        const incomingRequests = await FriendRequest.find({
+            sender: { $ne: currentUserId },
+            recipient: currentUserId,
+            status: "pending"
+        }).select("sender");
+        const incomingRequestUserIds = incomingRequests.map(req => req.sender);
+        
+        // Get users to whom current user has sent friend requests
+        const outgoingRequests = await FriendRequest.find({
+            sender: currentUserId,
+            status: "pending"
+        }).select("recipient");
+        const outgoingRequestUserIds = outgoingRequests.map(req => req.recipient);
+        
         const recommendedUsers = await User.find({
             $and: [
-                { _id: { $ne: currentUserId } }, // exclude the current user from the recommended users, im the current user who logedin into the system
-                {$id: {$nin: currentUser.friends}}, // exclude the friends of the current user from the recommended users
-                {isOnboarded: true}, // only onboarded users
-
+                { _id: { $ne: currentUserId } }, // exclude the current user from the recommended users
+                { _id: { $nin: currentUser.friends } }, // exclude the friends of the current user from the recommended users
+                { _id: { $nin: incomingRequestUserIds } }, // exclude users who have sent friend requests to current user
+                { _id: { $nin: outgoingRequestUserIds } }, // exclude users to whom current user has sent friend requests
+                { isOnboarded: true }, // only onboarded users
             ]
-        })
+        }).select("fullName profilePicture nativeLanguage learningLanguage location bio");
+        
         res.status(200).json({ message: "Recommended users fetched successfully", recommendedUsers });
     }
     catch(error){
@@ -27,7 +45,7 @@ export async function getMyFriends(req, res) {
         const user = await User.findById(req.user.id)
         .select("friends")
         // populate the friends field with the user's friends
-        .populate("friends", "fullName profilePic nativeLanguage learningLanguage");
+        .populate("friends", "fullName profilePicture nativeLanguage learningLanguage");
         
         res.status(200).json({ message: "My friends fetched successfully", user: user.friends });
     } catch (error) {
@@ -60,6 +78,15 @@ export async function sendFriendRequest(req, res) {
       recipient: myId,
     });
     if (existingRequest)
+      return res
+        .status(400)
+        .json({ message: "Friend request already sent" });
+    // check if I have already sent a friend request to the recipient
+    const myExistingRequest = await FriendRequest.findOne({
+      sender: myId,
+      recipient: recipientId,
+    });
+    if (myExistingRequest)
       return res
         .status(400)
         .json({ message: "Friend request already sent" });
@@ -100,8 +127,8 @@ export async function acceptFriendRequest(req, res) {
 
 export async function getFriendRequests(req, res) {
     try {
-        const incomingFriendRequests = await FriendRequest.find({recipient: req.user.id, status: "pending"}).populate("sender", "fullName profilePic nativeLanguage learningLanguage");
-        const acceptedFriendRequests = await FriendRequest.find({sender: req.user.id, status: "accepted"}).populate("recipient", "fullName profilePic");    
+        const incomingFriendRequests = await FriendRequest.find({recipient: req.user.id, status: "pending"}).populate("sender", "fullName profilePicture nativeLanguage learningLanguage");
+        const acceptedFriendRequests = await FriendRequest.find({sender: req.user.id, status: "accepted"}).populate("recipient", "fullName profilePicture");    
         res.status(200).json({message: "Friend requests fetched successfully", incomingFriendRequests, acceptedFriendRequests});
     } catch (error) {
         console.error("Error in getFriendRequests controller", error);
@@ -111,7 +138,7 @@ export async function getFriendRequests(req, res) {
 
 export async function getOutgoingFriendRequests(req, res) {
     try {
-        const outgoingFriendRequests = await FriendRequest.find({sender: req.user.id, status: "pending"}).populate("recipient", "fullName profilePic nativeLanguage learningLanguage");
+        const outgoingFriendRequests = await FriendRequest.find({sender: req.user.id, status: "pending"}).populate("recipient", "fullName profilePicture nativeLanguage learningLanguage");
         res.status(200).json({message: "Outgoing friend requests fetched successfully", outgoingFriendRequests});
     } catch (error) {
         console.error("Error in getOutgoingFriendRequests controller", error);

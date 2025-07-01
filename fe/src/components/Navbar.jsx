@@ -18,42 +18,54 @@ const Navbar = () => {
   const { logoutMutation } = useLogout();
 
   return (
-    <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
+    <nav className="bg-base-100/80 backdrop-blur-md border-b border-base-300/50 sticky top-0 z-30 h-16 flex items-center shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-end w-full">
+        <div className="flex items-center justify-between w-full">
           {/* LOGO - ONLY IN THE CHAT PAGE */}
           {isChatPage && (
-            <div className="pl-5">
-              <Link to="/" className="flex items-center gap-2.5">
-                <ShipWheelIcon className="size-9 text-primary" />
-                <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary  tracking-wider">
-                  Streamify
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center gap-3 group">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 group-hover:from-primary/20 group-hover:to-secondary/20 transition-all duration-300">
+                  <ShipWheelIcon className="size-6 text-primary" />
+                </div>
+                <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wide">
+                  TalkIn
                 </span>
               </Link>
             </div>
           )}
 
-          <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+          <div className="flex items-center gap-2">
+            {/* Notifications */}
             <Link to={"/notifications"}>
-              <button className="btn btn-ghost btn-circle">
-                <BellIcon className="h-6 w-6 text-base-content opacity-70" />
+              <button className="btn btn-ghost btn-sm rounded-xl hover:bg-base-200/80 transition-all duration-200">
+                <BellIcon className="h-5 w-5 text-base-content/70" />
               </button>
             </Link>
-          </div>
 
-          {/* TODO */}
-          <ThemeSelector />
+            {/* Theme Selector */}
+            <ThemeSelector />
 
-          <div className="avatar">
-            <div className="w-9 rounded-full">
-              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
+            {/* User Avatar */}
+            <div className="avatar ml-2">
+              <div className="w-8 h-8 rounded-xl ring-2 ring-base-300/50 hover:ring-primary/30 transition-all duration-200">
+                <img 
+                  src={authUser?.profilePicture} 
+                  alt="User Avatar" 
+                  className="rounded-xl"
+                  rel="noreferrer" 
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Logout button */}
-          <button className="btn btn-ghost btn-circle" onClick={logoutMutation}>
-            <LogOutIcon className="h-6 w-6 text-base-content opacity-70" />
-          </button>
+            {/* Logout button */}
+            <button 
+              className="btn btn-ghost btn-sm rounded-xl hover:bg-error/10 hover:text-error transition-all duration-200 ml-1" 
+              onClick={logoutMutation}
+            >
+              <LogOutIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </nav>
