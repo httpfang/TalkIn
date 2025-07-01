@@ -63,3 +63,9 @@ export async function getStreamToken() {
   const response = await axiosInstance.get("/chat/token");
   return response.data;
 }
+
+export const getGroups = () => axiosInstance.get("/groups");
+export const createGroup = (data) => axiosInstance.post("/groups", data);
+export const joinGroup = (id) => axiosInstance.post(`/groups/${id}/join`);
+export const leaveGroup = (id) => axiosInstance.post(`/groups/${id}/leave`);
+export const removeGroupMember = (groupId, userId) => axiosInstance.delete(`/groups/${groupId}/member/${userId}`);

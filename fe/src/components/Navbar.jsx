@@ -21,21 +21,19 @@ const Navbar = () => {
     <nav className="bg-base-100/80 backdrop-blur-md border-b border-base-300/50 sticky top-0 z-30 h-16 flex items-center shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between w-full">
-          {/* LOGO - ONLY IN THE CHAT PAGE */}
-          {isChatPage && (
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 group-hover:from-primary/20 group-hover:to-secondary/20 transition-all duration-300">
-                  <ShipWheelIcon className="size-6 text-primary" />
-                </div>
-                <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wide">
-                  TalkIn
-                </span>
-              </Link>
-            </div>
-          )}
+          {/* LOGO - Always show on mobile, only on chat page for desktop */}
+          <div className={`flex items-center ${isChatPage ? '' : 'lg:hidden'}`}>
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 group-hover:from-primary/20 group-hover:to-secondary/20 transition-all duration-300">
+                <ShipWheelIcon className="size-6 text-primary" />
+              </div>
+              <span className="text-2xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wide">
+                TalkIn
+              </span>
+            </Link>
+          </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 ml-auto">
             {/* Notifications */}
             <Link to={"/notifications"}>
               <button className="btn btn-ghost btn-sm rounded-xl hover:bg-base-200/80 transition-all duration-200">

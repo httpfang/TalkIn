@@ -7,7 +7,9 @@ import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CallPage from "./pages/CallPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
-import FriendsPage from "./pages/Friendspage.jsx";
+import FriendsPage from "./pages/FriendsPage.jsx";
+import GroupsPage from "./pages/GroupsPage.jsx";
+import GroupChatPage from "./pages/GroupChatPage.jsx";
 
 import { Toaster } from "react-hot-toast";
 
@@ -77,6 +79,20 @@ const App = () => {
             )
           }
         />
+
+        <Route
+          path="/groups"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <GroupsPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
+
         <Route
           path="/call/:id"
           element={
@@ -92,7 +108,7 @@ const App = () => {
           path="/chat/:id"
           element={
             isAuthenticated && isOnboarded ? (
-              <Layout showSidebar={false}>
+              <Layout showSidebar={false} hideNavOnMobile={true}>
                 <ChatPage />
               </Layout>
             ) : (
@@ -115,6 +131,20 @@ const App = () => {
             )
           }
         />
+
+        <Route
+          path="/groups/:id"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <GroupChatPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
+
       </Routes>
 
       <Toaster />
