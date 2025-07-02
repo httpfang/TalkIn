@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAuthUser from "../hooks/useAuthUser";
 import { getGroups, removeGroupMember, getStreamToken } from "../lib/api";
-import { StreamChat } from "stream-chat";
+import { getStreamClient } from '../lib/streamClient';
 import {
   Chat,
   Channel,
@@ -51,15 +51,17 @@ const GroupChatPage = () => {
   useEffect(() => {
     const initChat = async () => {
       if (!group || !authUser || !tokenData?.token) return;
-      const client = StreamChat.getInstance(STREAM_API_KEY);
-      await client.connectUser(
-        {
-          id: authUser._id,
-          name: authUser.fullName,
-          image: authUser.profilePicture,
-        },
-        tokenData.token
-      );
+      const client = getStreamClient(STREAM_API_KEY);
+      if (!client.userID) {
+        await client.connectUser(
+          {
+            id: authUser._id,
+            name: authUser.fullName,
+            image: authUser.profilePicture,
+          },
+          tokenData.token
+        );
+      }
       const channelId = `group-${groupId}`;
       const members = group.members.map(m => m._id);
       const currChannel = client.channel("messaging", channelId, { members });
@@ -68,10 +70,7 @@ const GroupChatPage = () => {
       setChannel(currChannel);
     };
     initChat();
-    // Cleanup
-    return () => {
-      if (chatClient) chatClient.disconnectUser();
-    };
+    // No disconnectUser in cleanup!
     // eslint-disable-next-line
   }, [group, authUser, tokenData]);
 
