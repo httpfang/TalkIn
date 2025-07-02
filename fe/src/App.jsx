@@ -1,6 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import { Navigate, Route, Routes } from "react-router-dom";
 
+import FriendsPage from "./FriendsPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -10,7 +11,6 @@ import ChatPage from "./pages/ChatPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
 import GroupsPage from "./pages/GroupsPage.jsx";
 import GroupChatPage from "./pages/GroupChatPage.jsx";
-import FriendsPage from "./pages/FriendsPage.jsx";
 
 import PageLoader from "./components/PageLoader.jsx";
 import Layout from "./components/Layout.jsx";

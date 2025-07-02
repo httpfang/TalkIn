@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserFriends } from "../lib/api";
-import FriendCard from "../components/FriendCard";
-import NoFriendsFound from "../components/NoFriendsFound";
+import { getUserFriends } from "./lib/api";
+import FriendCard from "./components/FriendCard";
+import NoFriendsFound from "./components/NoFriendsFound";
 
 const FriendsPage = () => {
   const { data: friends = [], isLoading } = useQuery({
