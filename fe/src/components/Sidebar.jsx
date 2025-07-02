@@ -114,7 +114,7 @@ const MobileNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-base-100/95 border-t border-base-300/50 flex justify-around items-center h-16 lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-base-100/95 border-t border-base-300/50 flex justify-around items-center h-16 pt-2 lg:hidden">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path;

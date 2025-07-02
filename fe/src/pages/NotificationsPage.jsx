@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { acceptFriendRequest, getFriendRequests } from "../lib/api";
+import { acceptFriendRequest, getFriendRequests, markNotificationsAsRead } from "../lib/api";
 import { BellIcon, ClockIcon, MessageSquareIcon, UserCheckIcon } from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
+import { useEffect } from "react";
 
 const NotificationsPage = () => {
   const queryClient = useQueryClient();
@@ -21,6 +22,14 @@ const NotificationsPage = () => {
 
   const incomingRequests = friendRequests?.incomingFriendRequests || [];
   const acceptedRequests = friendRequests?.acceptedFriendRequests || [];
+
+  useEffect(() => {
+    async function markReadAndRefetch() {
+      await markNotificationsAsRead();
+      queryClient.invalidateQueries({ queryKey: ["unreadNotificationCount"] });
+    }
+    markReadAndRefetch();
+  }, [queryClient]);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">

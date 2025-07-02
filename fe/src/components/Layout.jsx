@@ -10,7 +10,7 @@ const Layout = ({ children, showSidebar = false, hideNavOnMobile = false }) => {
         <div className="flex-1 flex flex-col">
           {!hideNavOnMobile ? <Navbar /> : <div className="hidden lg:block"><Navbar /></div>}
 
-          <main className="flex-1 overflow-y-auto">{children}</main>
+          <main className="flex-1 overflow-y-auto pb-20">{children}</main>
         </div>
       </div>
       {/* Mobile bottom nav */}

@@ -3,6 +3,8 @@ import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
+import { useQuery } from "@tanstack/react-query";
+import { getUnreadNotificationCount } from "../lib/api";
 
 const Navbar = () => {
   const { authUser } = useAuthUser();
@@ -16,6 +18,11 @@ const Navbar = () => {
   // });
 
   const { logoutMutation } = useLogout();
+
+  const { data: notificationCount = 0, refetch: refetchNotificationCount } = useQuery({
+    queryKey: ["unreadNotificationCount"],
+    queryFn: getUnreadNotificationCount,
+  });
 
   return (
     <nav className="bg-base-100/80 backdrop-blur-md border-b border-base-300/50 sticky top-0 z-30 h-16 flex items-center shadow-sm">
@@ -35,9 +42,14 @@ const Navbar = () => {
 
           <div className="flex items-center gap-2 ml-auto">
             {/* Notifications */}
-            <Link to={"/notifications"}>
+            <Link to={"/notifications"} className="relative">
               <button className="btn btn-ghost btn-sm rounded-xl hover:bg-base-200/80 transition-all duration-200">
                 <BellIcon className="h-5 w-5 text-base-content/70" />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-error text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[18px] flex items-center justify-center">
+                    {notificationCount}
+                  </span>
+                )}
               </button>
             </Link>
 
