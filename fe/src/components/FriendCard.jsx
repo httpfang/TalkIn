@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { MessageCircleIcon, MapPinIcon } from "lucide-react";
 import { LANGUAGE_TO_FLAG } from "../constants";
 

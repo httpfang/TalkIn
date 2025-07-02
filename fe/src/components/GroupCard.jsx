@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const GroupCard = ({ group, onJoin, onLeave, isMember, isAdmin, isCallOngoing }) => {
   const navigate = useNavigate();

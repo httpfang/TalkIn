@@ -43,4 +43,4 @@ const FriendsPage = () => {
   );
 };
 
-export default FriendsPage;
+export default FriendsPage; 
