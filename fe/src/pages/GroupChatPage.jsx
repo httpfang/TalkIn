@@ -129,17 +129,20 @@ const GroupChatPage = () => {
   const isAdmin = group.admins.some(a => a._id === authUser._id);
 
   return (
-    <div className="w-full h-[93vh] bg-gradient-to-br from-base-100 via-base-100 to-base-200/30">
-      <div className="flex flex-col md:flex-row gap-8 h-full">
+    <div className="w-full bg-gradient-to-br from-base-100 via-base-100 to-base-200/30 pb-20 px-2 sm:px-4">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8 min-h-screen">
         {/* Chat Section */}
-        <div className="flex-1 min-w-0 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-4 px-6 pt-6">
-            <h2 className="text-2xl font-bold">{group.name} Group Chat</h2>
-            <button className="btn btn-primary rounded-xl" onClick={handleGroupCall}>
+        <div className="flex-1 min-w-0 flex flex-col">
+          <div className="flex items-center justify-between mb-4 px-2 pt-4 sm:px-6 sm:pt-6">
+            <h2 className="text-xl sm:text-2xl font-bold">{group.name} Group Chat</h2>
+            <button
+              className="btn btn-primary rounded-xl btn-sm sm:btn-md"
+              onClick={handleGroupCall}
+            >
               Start Group Call
             </button>
           </div>
-          <div className="flex-1 rounded-2xl border border-base-300/30 shadow-lg overflow-hidden mx-6 mb-6">
+          <div className="flex-1 rounded-2xl border border-base-300/30 shadow-lg overflow-hidden mx-0 sm:mx-6 mb-4 sm:mb-6 min-h-[300px]">
             <Chat client={chatClient}>
               <Channel channel={channel}>
                 <Window>
@@ -153,20 +156,32 @@ const GroupChatPage = () => {
           </div>
         </div>
         {/* Members Section */}
-        <div className="w-full md:w-72 bg-base-100 rounded-2xl border border-base-300/30 shadow-lg p-4 h-full flex flex-col">
-          <h3 className="font-semibold text-lg mb-3">Members</h3>
+        <div className="w-full md:w-72 bg-base-100 rounded-2xl border border-base-300/30 shadow-lg p-3 sm:p-4 flex flex-col max-h-[350px] md:max-h-none overflow-y-auto">
+          <h3 className="font-semibold text-base sm:text-lg mb-3">Members</h3>
           <ul className="space-y-2 flex-1 overflow-y-auto">
-            {group.members.map(member => (
-              <li key={member._id} className="flex items-center justify-between gap-2">
+            {group.members.map((member) => (
+              <li
+                key={member._id}
+                className="flex items-center justify-between gap-2"
+              >
                 <div className="flex items-center gap-2">
-                  <img src={member.profilePicture} alt={member.fullName} className="w-8 h-8 rounded-full" />
-                  <span>{member.fullName}</span>
-                  {group.admins.some(a => a._id === member._id) && (
-                    <span className="badge badge-primary/20 text-primary ml-2">Admin</span>
+                  <img
+                    src={member.profilePicture}
+                    alt={member.fullName}
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <span className="text-sm sm:text-base">{member.fullName}</span>
+                  {group.admins.some((a) => a._id === member._id) && (
+                    <span className="badge badge-primary/20 text-primary ml-2 text-xs sm:text-sm">
+                      Admin
+                    </span>
                   )}
                 </div>
                 {isAdmin && member._id !== authUser._id && (
-                  <button className="btn btn-xs btn-error rounded-xl" onClick={() => handleRemove(member._id)}>
+                  <button
+                    className="btn btn-xs btn-error rounded-xl"
+                    onClick={() => handleRemove(member._id)}
+                  >
                     Remove
                   </button>
                 )}

@@ -189,8 +189,8 @@ const CallPage = () => {
   }
 
   return (
-    <div className="h-screen bg-gradient-to-br from-base-100 via-base-100 to-base-200/30">
-      <div className="relative h-full">
+    <div className="h-screen bg-gradient-to-br from-base-100 via-base-100 to-base-200/30 pb-20 px-2 sm:px-4">
+      <div className="relative h-full min-h-[300px]">
         <StreamVideo client={client}>
           <StreamCall call={call}>
             <CallContent />

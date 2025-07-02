@@ -152,20 +152,24 @@ const ChatPage = () => {
   }
 
   return (
-    <div className="h-[93vh] bg-gradient-to-br from-base-100 via-base-100 to-base-200/30">
-      <Chat client={chatClient}>
-        <Channel channel={channel}>
-          <div className="w-full relative h-full">
-            <CallButton handleVideoCall={handleVideoCall} />
-            <Window className="rounded-2xl border border-base-300/30 shadow-lg overflow-hidden">
-              <ChannelHeader />
-              <MessageList />
-              <MessageInput focus />
-            </Window>
-          </div>
-          <Thread />
-        </Channel>
-      </Chat>
+    <div className="w-full bg-gradient-to-br from-base-100 via-base-100 to-base-200/30 pb-20 px-2 sm:px-4 min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-[300px]">
+        <div className="w-full max-w-3xl flex-1 rounded-2xl border border-base-300/30 shadow-lg overflow-hidden bg-base-100">
+          <Chat client={chatClient}>
+            <Channel channel={channel}>
+              <div className="relative w-full h-full">
+                <CallButton handleVideoCall={handleVideoCall} />
+                <Window>
+                  <ChannelHeader />
+                  <MessageList />
+                  <MessageInput focus />
+                </Window>
+                <Thread />
+              </div>
+            </Channel>
+          </Chat>
+        </div>
+      </div>
     </div>
   );
 };

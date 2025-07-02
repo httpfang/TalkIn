@@ -114,7 +114,7 @@ const MobileNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-base-100/95 border-t border-base-300/50 flex justify-around items-center h-16 pt-2 lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-base-100 border-t border-base-300/50 flex justify-around items-center h-16 pt-2 lg:hidden">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path;
@@ -147,15 +147,23 @@ const MobileNav = () => {
       </button>
       {/* Profile/Logout Drawer */}
       {showProfile && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30" onClick={() => setShowProfile(false)}>
-          <div className="bg-base-100 w-full max-w-xs rounded-t-2xl p-6 pb-8 shadow-lg" onClick={e => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
+          onClick={() => setShowProfile(false)}
+        >
+          <div
+            className="bg-base-100 w-full max-w-xs rounded-t-2xl p-6 pb-8 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex flex-col items-center gap-3 mb-4">
               <img
                 src={authUser?.profilePicture}
                 alt="User Avatar"
                 className="w-16 h-16 rounded-xl border-2 border-base-300 mb-2"
               />
-              <p className="font-semibold text-base text-base-content truncate">{authUser?.fullName}</p>
+              <p className="font-semibold text-base text-base-content truncate">
+                {authUser?.fullName}
+              </p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="size-2 rounded-full bg-success shadow-sm" />
                 <p className="text-xs text-success font-medium">Online</p>

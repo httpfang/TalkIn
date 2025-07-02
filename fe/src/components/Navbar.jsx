@@ -4,7 +4,7 @@ import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
 import { useQuery } from "@tanstack/react-query";
-import { getUnreadNotificationCount } from "../lib/api";
+import { getFriendRequests } from "../lib/api";
 
 const Navbar = () => {
   const { authUser } = useAuthUser();
@@ -19,10 +19,11 @@ const Navbar = () => {
 
   const { logoutMutation } = useLogout();
 
-  const { data: notificationCount = 0, refetch: refetchNotificationCount } = useQuery({
-    queryKey: ["unreadNotificationCount"],
-    queryFn: getUnreadNotificationCount,
+  const { data: friendRequests } = useQuery({
+    queryKey: ["friendRequests"],
+    queryFn: getFriendRequests,
   });
+  const notificationCount = friendRequests?.acceptedFriendRequests?.length || 0;
 
   return (
     <nav className="bg-base-100/80 backdrop-blur-md border-b border-base-300/50 sticky top-0 z-30 h-16 flex items-center shadow-sm">

@@ -69,14 +69,3 @@ export const createGroup = (data) => axiosInstance.post("/groups", data);
 export const joinGroup = (id) => axiosInstance.post(`/groups/${id}/join`);
 export const leaveGroup = (id) => axiosInstance.post(`/groups/${id}/leave`);
 export const removeGroupMember = (groupId, userId) => axiosInstance.delete(`/groups/${groupId}/member/${userId}`);
-
-// Fetch unread notification count
-export async function getUnreadNotificationCount() {
-  const response = await axiosInstance.get("/users/notifications/unread-count");
-  return response.data.count;
-}
-
-// Mark notifications as read
-export async function markNotificationsAsRead() {
-  await axiosInstance.post("/users/notifications/mark-read");
-}
