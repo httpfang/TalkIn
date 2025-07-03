@@ -69,3 +69,8 @@ export const createGroup = (data) => axiosInstance.post("/groups", data);
 export const joinGroup = (id) => axiosInstance.post(`/groups/${id}/join`);
 export const leaveGroup = (id) => axiosInstance.post(`/groups/${id}/leave`);
 export const removeGroupMember = (groupId, userId) => axiosInstance.delete(`/groups/${groupId}/member/${userId}`);
+
+export async function markAllNotificationsRead() {
+  const response = await axiosInstance.put("/users/notifications/mark-all-read");
+  return response.data;
+}

@@ -128,11 +128,20 @@ export async function acceptFriendRequest(req, res) {
 export async function getFriendRequests(req, res) {
     try {
         const incomingFriendRequests = await FriendRequest.find({recipient: req.user.id, status: "pending"}).populate("sender", "fullName profilePicture nativeLanguage learningLanguage");
-        const acceptedFriendRequests = await FriendRequest.find({sender: req.user.id, status: "accepted"}).populate("recipient", "fullName profilePicture");    
+        // Only return accepted requests that are not expired (read less than 5 minutes ago or unread)
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        const acceptedFriendRequests = await FriendRequest.find({
+          sender: req.user.id,
+          status: "accepted",
+          $or: [
+            { read: false },
+            { read: true, readAt: { $gt: fiveMinutesAgo } }
+          ]
+        }).populate("recipient", "fullName profilePicture");
         res.status(200).json({message: "Friend requests fetched successfully", incomingFriendRequests, acceptedFriendRequests});
     } catch (error) {
         console.error("Error in getFriendRequests controller", error);
-        res.status(500).json({message: "Internal server error", error: error.message});
+        res.status(500).json({ message: "Internal server error", error: error.message});
     }
 }
 
@@ -144,4 +153,18 @@ export async function getOutgoingFriendRequests(req, res) {
         console.error("Error in getOutgoingFriendRequests controller", error);
         res.status(500).json({message: "Internal server error", error: error.message});
     }
+}
+
+export async function markAllNotificationsRead(req, res) {
+  try {
+    const now = new Date();
+    await FriendRequest.updateMany(
+      { sender: req.user.id, status: "accepted", read: false },
+      { $set: { read: true, readAt: now } }
+    );
+    res.status(200).json({ message: "All notifications marked as read" });
+  } catch (error) {
+    console.error("Error in markAllNotificationsRead controller", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
 }

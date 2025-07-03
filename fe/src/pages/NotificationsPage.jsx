@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { acceptFriendRequest, getFriendRequests } from "../lib/api";
+import { acceptFriendRequest, getFriendRequests, markAllNotificationsRead } from "../lib/api";
 import { BellIcon, ClockIcon, MessageSquareIcon, UserCheckIcon } from "lucide-react";
 import NoNotificationsFound from "../components/NoNotificationsFound";
 
@@ -16,6 +16,13 @@ const NotificationsPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
       queryClient.invalidateQueries({ queryKey: ["friends"] });
+    },
+  });
+
+  const { mutate: markAllRead, isPending: isMarkingAllRead } = useMutation({
+    mutationFn: markAllNotificationsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
     },
   });
 
@@ -84,10 +91,22 @@ const NotificationsPage = () => {
             {/* ACCEPTED REQS NOTIFICATONS */}
             {acceptedRequests.length > 0 && (
               <section className="space-y-4">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <BellIcon className="h-5 w-5 text-success" />
-                  New Connections
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold flex items-center gap-2">
+                    <BellIcon className="h-5 w-5 text-success" />
+                    New Connections
+                  </h2>
+                  {/* Mark all as read button */}
+                  {acceptedRequests.some(n => !n.read) && (
+                    <button
+                      className="btn btn-outline btn-sm"
+                      onClick={() => markAllRead()}
+                      disabled={isMarkingAllRead}
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
 
                 <div className="space-y-3">
                   {acceptedRequests.map((notification) => (
